@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produto | Loja</title>
+
+    
+    
+     <link rel="stylesheet" href="produtos.css" type="text/css">
+</head>
+
+<body>
+    <div style="right: 0%;
+    position: fixed;
+    margin-top: 45px;">
+        <a href="carrinho.html" class="btn-carrinho" style="background: url(img/gnav/top-news-date-bg.png)no-repeat;
+    width: 90px;
+    display: flex;justify-content: center;     /* Alinha horizontalmente */
+  align-items: center; 
+  ">
+            <img style="width: 30px;"
+                src="https://img.freepik.com/icones-gratis/carrinho-de-mao_318-495998.jpg?size=626&ext=jpg" alt="">
+            <span id="qtd-carrinho">0</span> <!--aparece att da quantia-->
+        </a>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="produto-container">
+
+        <!-- ===== IMAGENS ===== -->
+        <section class="area-imagens">
+            <div>
+                <div class="imagem-principal">
+                    <img id="imagemPrincipal"
+                        src="https://blog.equipacenter.com.br/wp-content/uploads/2022/03/corda-de-viola.jpg">
+                </div>
+
+                <div class="miniaturas">
+                    <img src="https://blog.equipacenter.com.br/wp-content/uploads/2022/03/corda-de-viola.jpg"
+                        class="ativa">
+                    <img
+                        src="https://th.bing.com/th/id/OPHS.Wd7XUXcAOZCIMw474C474?w=248&h=248&c=17&o=5&dpr=1.3&pid=21.1">
+                    <img
+                        src="https://th.bing.com/th/id/OPHS.Wd7XUXcAOZCIMw474C474?w=248&h=248&c=17&o=5&dpr=1.3&pid=21.1">
+                </div>
+            </div>
+        </section>
+
+        <!-- info dos produtos -->
+        <section class="info-produto">
+
+            <span class="tag">Fores</span>
+
+
+            <h1 class="titulo">Corda de Viola</h1>
+
+            <p class="descricao">
+              Essa planta daninha tem a característica de ser trepadeira e possuir de 1 a 2 metros de comprimento,
+               com folhas em formato de coração, podendo também ser alongada
+            </p>
+
+            <div class="preco">
+                Preço unitário: <span id="precoUnitario">235.99</span> R$
+            </div>
+
+
+            <!--variedade-->
+
+
+            <div class="variedade">
+                <label for="variedadeSelect">Variedade:</label>
+                <select id="variedadeSelect" onchange="atualizarVariedade()">
+                    <option value="vermelho" selected>corda-de-viola</option>
+                    <option value="branco">Beldroega</option>
+                    <!-- <option value="rosa">Lírio Rosa</option>
+                    <option value="amarelo">Lírio Amarelo</option>-->
+                </select>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- glq -->
+            <div class="quantidade">
+                <button onclick="alterarQuantidade(-10)">-10</button>
+                <button onclick="alterarQuantidade(-1)">-1</button>
+
+                <span id="qtd">1</span>
+
+                <button onclick="alterarQuantidade(1)">+1</button>
+                <button onclick="alterarQuantidade(10)">+10</button>
+            </div>
+
+
+            <div class="total">
+                Total: <strong><span id="total">235.99</span> R$</strong>
+            </div>
+
+            <button class="botao-comprar" onclick="adicionarCarrinho()">
+                ADICIONAR AO CARRINHO
+            </button>
+
+        </section>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        /* dados */
+        /*para o local storage*/
+        const produto = {
+            id: "bt12",
+            nome: "Corda de Viola",
+            preco: 235.99,
+            imagens: [
+                "https://blog.equipacenter.com.br/wp-content/uploads/2022/03/corda-de-viola.jpg"
+            ]
+        };
+
+        let quantidade = 1;
+        let imagemSelecionada = produto.imagens[0];
+
+        /* img */
+        document.querySelectorAll(".miniaturas img").forEach((img, index) => {
+            img.addEventListener("click", () => {
+                document.getElementById("imagemPrincipal").src = img.src;
+                imagemSelecionada = img.src;
+
+                document.querySelectorAll(".miniaturas img")
+                    .forEach(i => i.classList.remove("ativa"));
+
+                img.classList.add("ativa");
+            });
+        });
+
+        /* quantia */
+        function alterarQuantidade(valor) {
+            quantidade += valor;
+            if (quantidade < 1) quantidade = 1;
+            if (quantidade > 99) quantidade = 99;
+
+            document.getElementById("qtd").textContent = quantidade;
+            atualizarTotal();
+        }
+
+        /* total */
+        function atualizarTotal() {
+            document.getElementById("total").textContent =
+                quantidade * produto.preco;
+        }
+
+
+
+
+
+
+        
+        /* carrinho*/
+        function adicionarCarrinho() {
+            const carrinho =
+                JSON.parse(localStorage.getItem("carrinho")) || [];
+
+            const existente = carrinho.find(item => item.id === produto.id);
+
+            if (existente) {
+                existente.quantidade += quantidade;
+            } else {
+                carrinho.push({
+                    id: produto.id,
+                    nome: produto.nome,
+                    preco: produto.preco,
+                    quantidade: quantidade,
+                    imagem: imagemSelecionada
+                });
+            }
+
+            localStorage.setItem("carrinho", JSON.stringify(carrinho));
+            atualizarContadorCarrinho();                                 // deve de estar ak para att imediatamente
+
+            alert("Produto adicionado ao carrinho!");
+        }
+
+        /* inicial */
+        atualizarTotal();
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        // Variedades disponíveis
+        const variedades = {
+            vermelho: {
+                descricao:"Essa planta daninha tem a característica de ser trepadeira e possuir de 1 a 2 metros de comprimento, com folhas em formato de coração, podendo também ser alongada",
+                nome: "Corda de Viola",
+                preco: 235.99,
+                imagem: "https://blog.equipacenter.com.br/wp-content/uploads/2022/03/corda-de-viola.jpg"
+            },
+            branco: {
+                descricao: "Solos ricos em matéria orgânica são sua preferência e os principais cultivos afetados são o algodão, o café, a batata, a cana de açúcar, as pastagens, a soja, o milho e o cacau.Lírios-da-aranha vermelhos distinguem-se por suas formas esculturais e coloração intensa, criando um efeito visual marcante e sofisticado. Uma flor de caráter singular, ideal para composições de estética refinada e contemporânea.",
+                nome: "Beldroega",
+                preco: 320.00,
+                imagem: "https://blog.equipacenter.com.br/wp-content/uploads/2022/03/beldroega.jpg"
+            }
+           
+        };
+
+        // Atualiza produto quando muda a variedade
+        function atualizarVariedade() {
+            const select = document.getElementById("variedadeSelect");
+            const valor = select.value;
+            const dados = variedades[valor];
+
+            produto.nome = dados.nome;
+            produto.preco = dados.preco;
+            imagemSelecionada = dados.imagem;
+
+            document.getElementById("imagemPrincipal").src = dados.imagem;
+            document.querySelector(".titulo").textContent = dados.nome;
+            document.querySelector(".descricao").textContent = dados.descricao;
+            document.getElementById("precoUnitario").textContent = dados.preco;
+            atualizarTotal();
+        }
+
+    </script>
+
+
+
+
+
+
+
+
+
+    <script>  /* att carrinho*/  /*deve de estar em todas aspaginas*/
+        function atualizarContadorCarrinho() {
+            const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+            const total = carrinho.reduce((s, p) => s + p.quantidade, 0);
+            const el = document.getElementById("qtd-carrinho");
+            if (el) el.textContent = total;
+        }
+
+        atualizarContadorCarrinho();
+    </script>
+</body>
+
+</html>

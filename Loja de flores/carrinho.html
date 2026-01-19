@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Carrinho</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+
+            background: #f2f2f2;
+
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <a href="texteloja.html">Vorta as compras</a>
+
+    <div class="container my-4">
+        <div class="card shadow">
+            <div class="card-body">
+
+                <h1>Carrinho</h1>
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="tab-carrinho" onclick="mostrarCarrinho()">
+                            Carrinho
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="tab-compras" onclick="mostrarCompras()">
+                            Compras realizadas
+                        </button>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div id="aba-carrinho">
+
+            <div id="lista"></div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <h5 id="total" class="mb-0"></h5>
+
+                <button class="btn btn-success btn-lg" onclick="finalizarCompra()">
+                    Confirmar compra
+                </button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div id="aba-compras" style="display:none;padding-left: 10%;padding-right: 10%;"> <!--arruma o bootstrap-->
+        <div id="lista-compras"></div>
+    </div>
+
+
+    </div>
+
+
+
+
+
+
+    <!-- scr-->
+
+    <script>
+        let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        const lista = document.getElementById("lista");
+        const totalEl = document.getElementById("total");
+
+        function renderCarrinho() {
+            lista.innerHTML = "";
+            let total = 0;
+
+            if (carrinho.length === 0) {
+                lista.innerHTML = "<p>Carrinho vazio</p>";
+                totalEl.textContent = "";
+                return;
+            }
+
+            carrinho.forEach((item, index) => {
+                total += item.preco * item.quantidade;
+
+                lista.innerHTML += `
+  <ul class="list-group mb-2">
+    <li class="list-group-item">
+      <div class="row align-items-center">
+
+        <div class="col-3 col-md-2">
+          <img src="${item.imagem}" class="img-fluid rounded">
+        </div>
+
+        <div class="col-9 col-md-4">
+          <strong>${item.nome}</strong><br>
+          <small class="text-muted">R$ ${item.preco}</small>
+        </div>
+
+        <div class="col-6 col-md-2">
+          Qtd: <strong>${item.quantidade}</strong>
+        </div>
+
+        <div class="col-6 col-md-2 text-end">
+          <button class="btn btn-outline-danger btn-sm"      /*btn*/
+            onclick="remover(${index})">
+            X
+          </button>
+        </div>
+      </div>
+    </li>
+  </ul>
+`;
+
+            });
+
+            totalEl.textContent = "Total: " + total;
+        }
+
+        function remover(index) {
+            carrinho.splice(index, 1);
+            localStorage.setItem("carrinho", JSON.stringify(carrinho));
+            renderCarrinho();
+        }
+
+        renderCarrinho();
+    </script>
+
+
+
+    <script>
+        function finalizarCompra() {
+            if (!carrinho || carrinho.length === 0) {
+                alert("Carrinho vazio");
+                return;
+            }
+
+            const compras =
+                JSON.parse(localStorage.getItem("comprasRealizadas")) || [];
+
+            compras.push({
+                idCompra: Date.now(),
+                data: new Date().toLocaleString(),
+                itens: carrinho.map(i => ({
+                    nome: i.nome,
+                    preco: Number(i.preco),
+                    imagem: i.imagem,
+                    quantidade: Number(i.quantidade) || 1
+                }))
+            });
+
+            localStorage.setItem("comprasRealizadas", JSON.stringify(compras));
+            localStorage.removeItem("carrinho");
+
+            carrinho = [];
+            renderCarrinho();
+            atualizarContadorCarrinho();
+
+            mostrarCompras();
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--ren compras reali-->
+    <script>
+        function renderCompras() {
+            const compras =
+                JSON.parse(localStorage.getItem("comprasRealizadas")) || [];
+
+            const lista = document.getElementById("lista-compras");
+            lista.innerHTML = "";
+
+            if (compras.length === 0) {
+                lista.innerHTML = "<p>Nenhuma compra realizada.</p>";
+                return;
+            }
+
+            compras.forEach((compra, iCompra) => {
+                compra.itens.forEach((item, iItem) => {
+                    lista.innerHTML += `
+<ul class="list-group mb-2">
+  <li class="list-group-item">
+    <div class="row align-items-center">
+
+      <div class="col-3 col-md-2">
+        <img src="${item.imagem}" class="img-fluid rounded">
+      </div>
+
+      <div class="col-9 col-md-4">
+        <strong>${item.nome}</strong><br>
+        <small class="text-muted">
+          Qtd: ${item.quantidade || 1}
+        </small>
+      </div>
+
+      <div class="col-6 col-md-2">
+        <strong>
+          R$ ${(item.preco || 0) * (item.quantidade || 1)}
+        </strong>
+      </div>
+
+      <div class="col-6 col-md-2 text-end">
+        <button class="btn btn-warning btn-sm"          /*btn*/
+          onclick="cancelar(${iCompra}, ${iItem})">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </li>
+</ul>
+`;
+
+                });
+            });
+        }
+
+    </script>
+    <script>
+        function cancelar(iCompra, iItem) {
+            const compras =
+                JSON.parse(localStorage.getItem("comprasRealizadas")) || [];
+            let carrinho =
+                JSON.parse(localStorage.getItem("carrinho")) || [];
+
+            const itemCancelado = compras[iCompra].itens[iItem];
+
+            // verifica se já existe no carrinho
+            const existente = carrinho.find(p => p.nome === itemCancelado.nome);
+
+            if (existente) {
+                existente.quantidade += itemCancelado.quantidade;
+            } else {
+                carrinho.push({
+                    nome: itemCancelado.nome,
+                    preco: itemCancelado.preco,
+                    imagem: itemCancelado.imagem,
+                    quantidade: itemCancelado.quantidade
+                });
+            }
+
+            // remove da compra
+            compras[iCompra].itens.splice(iItem, 1);
+
+            if (compras[iCompra].itens.length === 0) {
+                compras.splice(iCompra, 1);
+            }
+
+            localStorage.setItem("carrinho", JSON.stringify(carrinho));
+            localStorage.setItem("comprasRealizadas", JSON.stringify(compras));
+
+            atualizarContadorCarrinho();
+            renderCarrinho();
+            renderCompras();
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>  /* att carrinho*/  /*deve de estar em todas aspaginas*/
+        function atualizarContadorCarrinho() {
+            const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+            const total = carrinho.reduce((s, p) => s + p.quantidade, 0);
+            const el = document.getElementById("qtd-carrinho");
+            if (el) el.textContent = total;
+        }
+
+        atualizarContadorCarrinho();
+    </script>
+    <script>
+        const abaCarrinho = document.getElementById("aba-carrinho");
+        const abaCompras = document.getElementById("aba-compras");
+
+        const tabCarrinho = document.getElementById("tab-carrinho");
+        const tabCompras = document.getElementById("tab-compras");
+
+        function mostrarCarrinho() {
+            abaCarrinho.style.display = "block";
+            abaCompras.style.display = "none";
+
+            tabCarrinho.classList.add("active");
+            tabCompras.classList.remove("active");
+        }
+
+        function mostrarCompras() {
+            abaCarrinho.style.display = "none";
+            abaCompras.style.display = "block";
+
+            tabCompras.classList.add("active");
+            tabCarrinho.classList.remove("active");
+
+            renderCompras();
+        }
+        
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

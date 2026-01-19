@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Montserrat", -apple-system, sans-serif;
+            font-weight: 900;
+            color: #171f55;
+            margin: 0;
+            /*  background: url(img/gnav/header_bg.png) no-repeat fixed center top;*/
+            background-size: cover;
+        }
+
+        a {
+            text-decoration: none;
+            color: #171f55;
+        }
+
+
+        /*///////////////////////////////////////////////////////////////////////////////////*/
+
+        /* menu pc */
+        #menu_desktop {
+            display: none;
+        }
+
+        @media (min-width: 801px) {
+            #menu_desktop {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                height: 96px;
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                background: url(img/gnav/header_bg.png) no-repeat top left;
+            }
+
+            #menu_desktop .container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 40px;
+            }
+
+            .logo_desktop img {
+                width: 180px;
+            }
+
+            .menu_links {
+                display: flex;
+                gap: 20px;
+                list-style: none;
+                font-size: 14px;
+            }
+
+            .menu_links li a {
+                padding: 10px 14px;
+                color: #00408b;
+            }
+        }
+
+        /* menu mobile  */
+        #menu_mobile_topo {
+            z-index: 200;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: url(img/gnavsp/bg_header.png) no-repeat center top;
+            height: 16.8vw;
+            background-size: auto 16.875vw;
+            position: fixed;
+            width: 100%;
+        }
+
+        #botao_menu {
+            cursor: pointer;
+        }
+
+        .logo_mobile {
+            display: block;
+            margin: 0 auto;
+            width: 40vw;
+        }
+
+        /* Tela que cobre o site quando o menu mobile está aberto */
+        #tela_mobile {
+            display: none;
+        }
+
+        #menu_mobile {
+            background: url(img/gnav/fundo.png)no-repeat;
+            z-index: 2000;
+            position: fixed;
+            top: 0;
+            height: 100%;
+            background-size: 100vw;
+        }
+
+        #menu_mobile a {
+            display: block;
+            margin: 2vw auto 0;
+        }
+
+        /* Esconde o menu mobile no desktop */
+        @media (min-width: 801px) {
+            #menu_mobile_topo {
+                display: none;
+            }
+        }
+
+
+
+
+        /* ////////carrossel///////// */
+        .carrossel {
+            position: relative;
+            width: 100%;
+            max-width: 1100px;
+            overflow: hidden;
+            margin: 1px auto 0;
+        }
+
+        .carrossel_trilha {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        @media (max-width: 801px) {
+            .carrossel_trilha {
+                display: flex;
+                transition: transform 0.5s ease;
+                margin-top: 70px;
+            }
+        }
+
+        .carrossel a {
+            min-width: 100%;
+        }
+
+        .carrossel img {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .carrossel button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            font-size: 32px;
+            padding: 5px 12px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .carrossel .anterior {
+            left: 10px;
+        }
+
+        .carrossel .proximo {
+            right: 10px;
+        }
+
+        @media (min-width: 800px) {
+            .carrossel {
+                width: 800px;
+            }
+        }
+
+        /*////// banner flutuante ///////*/
+        .banner_flutuante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 300;
+            max-width: 280px;
+        }
+
+        .banner_flutuante img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Botão para fechar o banner */
+        .botao_fechar {
+            position: absolute;
+            top: -30px;
+            right: 0px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .botao_fechar img {
+            width: 28px;
+            height: 28px;
+        }
+
+        /*add mobile */
+        @media (max-width: 800px) {
+            .banner_flutuante {
+                bottom: 10px;
+                right: 10px;
+                max-width: 100%;
+            }
+        }
+
+
+
+
+
+        /* ///////////// btn carrossel ////////////////*/
+        .indicadores_carrossel {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 12px 0 0;
+            padding: 0;
+            list-style: none;
+            background: url(img/gnav/bg_controller.png) no-repeat center;
+            background-size: 450vw;
+        }
+
+        .indicadores_carrossel li {
+            display: inline-block;
+            margin: 10px 50px;
+        }
+
+        .indicadores_carrossel button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background: #7181da;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* btn ativo */
+        .indicadores_carrossel li.ativo button {
+            background: #171f55;
+        }
+
+        /* add mobile */
+        @media (max-width: 800px) {
+            .indicadores_carrossel {
+                gap: 8px;
+            }
+
+            .indicadores_carrossel button {
+                width: 10px;
+                height: 10px;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /* noticias */
+        .noticias {
+            background: #000;
+            padding: 60px 20px;
+            color: #fff;
+            text-align: center;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        .titulo_noticias {
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        .noticias_grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .noticia_card {
+            background: #111;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noticia_imagem {
+            width: 100%;
+            height: 180px;
+            background: #222;
+        }
+
+        .noticia_imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .noticia_info {
+            padding: 20px;
+        }
+
+        .data_noticia {
+            display: inline-block;
+            background: url(img/gnav/top-news-date-bg.png) no-repeat;
+            padding: 8px 42px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .titulo_card {
+            font-size: 16px;
+            margin: 15px 0;
+        }
+
+        .botao_noticia {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            border: 1px solid #e60012;
+            color: #e60012;
+            border-radius: 20px;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .botao_noticia:hover {
+            background: #e60012;
+            color: #fff;
+        }
+
+        .ver_mais {
+            margin-top: 40px;
+        }
+
+        .botao_ver_mais {
+            padding: 12px 30px;
+            background: #e60012;
+            color: #fff;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .botao_ver_mais:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 900px) {
+            .noticias_grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /* /////////footer/////////*/
+        #footerCol {
+            width: 100%;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+
+        .footerCol_inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+
+        .footerCol_conteudo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer_infoCol p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .footer_infoCol ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .footer_infoCol li {
+            font-size: 13px;
+        }
+
+        .aviso_legal {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .footer_botoes {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .botao_footer {
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 13px;
+            text-decoration: none;
+            border: 1px solid #ccc;
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .botao_footer:hover {
+            opacity: 0.7;
+        }
+
+        /*a coisa la*/
+        .copyright {
+            margin-top: 10px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .footer_infoCol p {
+                font-size: 13px;
+            }
+
+            .botao_footer {
+                width: 100%;
+                max-width: 260px;
+                text-align: center;
+            }
+        }
+
+        .botao_whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-color: #25D366;
+        }
+
+        .botao_whatsapp:hover {
+            background: #25D366;
+            color: #fff;
+        }
+
+        .botao_whatsapp:hover img {
+            filter: brightness(0) invert(1);
+            /*inverte as cores*/
+        }
+    </style>
+    <link rel="stylesheet" href="load.css" type="text/css">
+</head>
+
+<body>
+    <!-- /////////////////////////////////////// -->
+    <div id="loading">
+        <div class="loading-conteudo">
+            <div class="loader"></div>
+            <p>Carregando…</p>
+        </div>
+    </div>
+    <!-- ///////////////////////////////////// -->
+
+
+    <!-- menu mobile--><!-- menu mobile--><!-- menu mobile--><!-- menu mobile--><!-- menu mobile--><!-- menu mobile--><!-- menu mobile--><!-- menu mobile-->
+    <nav id="menu_mobile_topo">
+        <strong style="opacity: 0;">MENU</strong>
+
+        <div>
+            <img class="logo_mobile" src="img/gnav/img_logo.png" alt="Digimon Card Game">
+        </div>
+
+        <div id="botao_menu">
+            <img style="width: 50px;" src="img/gnav/menu_brn.png" alt="Abrir menu">
+        </div>
+    </nav>
+
+    <!-- tela mobile-->
+    <nav id="tela_mobile">
+        <div id="menu_mobile">
+
+            <!-- logo no menu mobile -->
+            <a href="principal2.html">
+                <img style="display: block; width: 42.5vw; margin: 0 auto 5vw;" src="img/gnav/img_logo.png"
+                    alt="Digimon Card Game">
+            </a>
+
+            <!-- botões do menu mobile -->
+            <div style="display: flex; flex-wrap: wrap;">
+                <a href="#noticias"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/regras_btn.png"
+                        alt="Sobre"></a>
+                <a href="#noticias"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/noticias_btn.png"
+                        alt="Sobre"></a>
+                <a href="texteloja.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/prdutos_btn.png"
+                        alt="Sobre"></a>
+                <a href="#noticias"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/lista_btn.png"
+                        alt="Sobre"></a>
+                <a href="#noticias"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/avaliacao_btn.png"
+                        alt="Sobre"></a>
+                <a href="produto.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/mais_btn.png"
+                        alt="Sobre"></a>
+            </div>
+
+            <!-- Botão de fechar o menu -->
+            <div class="btn_close">
+                <img style="width: 100%; margin-top: 10px;" src="img/gnav/close.png" alt="Fechar menu">
+            </div>
+        </div>
+    </nav>
+
+    <!-- pc -->
+    <nav id="menu_desktop">
+        <div class="container">
+            <div class="logo_desktop">
+                <img src="img/gnav/img_logo.png" alt="Digimon Card Game">
+            </div>
+
+            <ul class="menu_links">
+                <li><a href="#noticias">SOBRE</a></li>
+                <li><a href="#noticias">NOTÍCIAS</a></li>
+                <li><a href="texteloja.html">PRODUTOS</a></li>
+                <li><a href="#noticias">AVALIAÇAO</a></li>
+                <li><a href="#noticias">LISTA</a></li>
+                <li><a href="#noticias">REGRAS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--/////////////////// -->
+    <!--/////////////////// -->
+    <!--/////////////////// --> <!--conteudo unico da pag-->
+    <!--/////////////////// -->    
+    <main>
+        <div class="carrossel" style="padding-top: 1.5vw;">
+
+
+
+            <div class="carrossel_trilha">
+                <a href="#"><img src="mr_baner.png" alt="Evento Digimon"></a>
+                <a href="#"><img src="img/baner2.png" alt="Produto Digimon"></a>
+                <a href="#"><img src="mr_baner.png" alt="Banner promocional"></a>
+            </div>
+
+            <button class="anterior"><img style="width: 10vw;">&#10094;</button>
+            <button class="proximo"><img style="width: 10vw;">&#10095;</button>
+        </div>
+        <ul class="indicadores_carrossel" role="tablist"></ul>
+    </main>
+
+    <!-- js -->
+    <script>
+        const botaoMenu = document.getElementById("botao_menu");
+        const menuMobile = document.getElementById("tela_mobile");
+        const botaoFecharMenu = document.querySelector(".btn_close");
+
+        botaoMenu.onclick = () => {
+            menuMobile.style.display =
+                menuMobile.style.display === "block" ? "none" : "block";
+        };
+        botaoFecharMenu.onclick = () => {
+            menuMobile.style.display = "none";
+        };
+    </script>
+
+    <!-- js carrossel -->
+    <script>
+        const trilha = document.querySelector(".carrossel_trilha");
+        const slides = document.querySelectorAll(".carrossel_trilha a");
+        const botaoProximo = document.querySelector(".proximo");
+        const botaoAnterior = document.querySelector(".anterior");
+        const listaIndicadores = document.querySelector(".indicadores_carrossel");
+
+        let indiceAtual = 0;
+
+        /* Criar indicadores dinamicamente */
+        slides.forEach((_, indice) => {
+            const item = document.createElement("li");
+            const botao = document.createElement("button");
+
+            botao.setAttribute("aria-label", `Slide ${indice + 1}`);
+            botao.onclick = () => {
+                indiceAtual = indice;
+                atualizarCarrossel();
+            };
+
+            item.appendChild(botao);
+            listaIndicadores.appendChild(item);
+        });
+
+        const indicadores = document.querySelectorAll(".indicadores_carrossel li");
+
+        function atualizarCarrossel() {
+            trilha.style.transform = `translateX(-${indiceAtual * 100}%)`;
+
+            indicadores.forEach((item, i) => {
+                item.classList.toggle("ativo", i === indiceAtual);
+            });
+        }
+
+        botaoProximo.onclick = () => {
+            indiceAtual = (indiceAtual + 1) % slides.length;
+            atualizarCarrossel();
+        };
+
+        botaoAnterior.onclick = () => {
+            indiceAtual = (indiceAtual - 1 + slides.length) % slides.length;
+            atualizarCarrossel();
+        };
+
+        /* Autoplay */
+        setInterval(() => {
+            indiceAtual = (indiceAtual + 1) % slides.length;
+            atualizarCarrossel();
+        }, 9000);
+
+        /* Inicia com o primeiro indicador ativo */
+        atualizarCarrossel();
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="noticias" id="noticias">
+        <h2 class="titulo_noticias">News</h2>
+
+        <div class="noticias_grid">
+
+            <!-- nt 1 -->
+            <div class="noticia_card">
+                <div class="noticia_imagem">
+                    <!-- Imagem aqui -->
+                    <img src="img/gnav/ervas-daninhas-768x443.jpg" alt="Notícia 1">
+                </div>
+
+                <div class="noticia_info">
+                    <span class="data_noticia">01/09/2026</span>
+                    <p class="titulo_card">Do mato ao destaque floral</p>
+                    <a href="notcia1.html" class="botao_noticia">Ver detalhes</a>
+                </div>
+            </div>
+
+            <!-- nt 2 -->
+            <div class="noticia_card">
+                <div class="noticia_imagem">
+                    <img src="img/gnav/Black-Lotus.avif" alt="Notícia 2">
+                </div>
+
+                <div class="noticia_info">
+                    <span class="data_noticia">01/02/2026</span>
+                    <p class="titulo_card">Nova espécie de flor é anunciada</p>
+                    <a href="noticia2.html" class="botao_noticia">Ver detalhes</a>
+                </div>
+            </div>
+
+            <!-- nt 3 -->
+            <div class="noticia_card">
+                <div class="noticia_imagem">
+                    <img src="img/sacada.jpg" alt="Notícia 3">
+                </div>
+
+                <div class="noticia_info">
+                    <span class="data_noticia">26/12/2025</span>
+                    <p class="titulo_card">Flores ditam o novo estilo</p>
+                    <a href="noticia3.html" class="botao_noticia">Ver detalhes</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- btn -->
+        <div class="ver_mais">
+            <a href="noticias.html" class="botao_ver_mais">Ver mais</a>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <div class="stylized-line-img"><img style="width: 100%;" src="img/gnav/top_stylized_line.png"></div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <footer id="footerCol"
+        style="background: url(img/gnav/bg_footer.png)repeat-x center top; background-size: cover;background-color: #000;">
+        <div class="footerCol_inner">
+
+            <div class="footerCol_conteudo">
+
+                <!-- Texto informativo -->
+                <div class="footer_infoCol">
+                    <p>
+                        Casa florícola — arte dos arranjos florais para ocasiões distintas e dádivas de rara estima.
+                    </p>
+
+                    <ul>
+                        <li> Entregas rápidas e seguras </li>
+                        <li> Flores frescas todos os dias </li>
+                        <li> Atendimento personalizado </li>
+                    </ul>
+
+                    <p class="aviso_legal">
+                        As representações visuais ora exibidas possuem finalidade exclusivamente ilustrativa,
+                        podendo os arranjos florais divergir daqueles apresentados,
+                        conforme a disponibilidade das flores à época de sua elaboração.
+                    </p>
+                </div>
+
+                <!-- btn -->
+                <div class="footer_botoes">
+
+                    <a id="ot-sdk-btn" class="botao_footer ot-sdk-show-settings">
+                        Configurações de Cookies
+                    </a>
+
+                    <a href="#" class="botao_footer">
+                        Política de Privacidade
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/5500000000000" target="_blank" class="botao_footer botao_whatsapp">
+                        <img style="width: 20px;" src="WhatsApp-icone.png" alt="WhatsApp">
+                        Contato
+                    </a>
+
+                </div>
+
+                <!-- Direitos autorais -->
+                <div class="copyright">
+                    <small>&#169; 2026 • Jardim Uivo dos Lirios</small>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- baner flutuante - baner flutuante - baner flutuante baner  -flutuante baner flutuante baner flutuante baner flutuante baner flutuante baner flutuante baner flutuante -->
+
+-->
+    <aside class="banner_flutuante" id="bannerFlutuante">
+        <span class="botao_fechar" id="fecharBanner">
+            <img src="img/gnav/flbnr_close.png" alt="Fechar banner">
+        </span>
+
+        <a href="produto.html" target="_blank" rel="noopener">
+            <picture>
+                <source media="(min-width: 800.1px)" srcset="img/gnavsp/bnr_flituante.png">
+                <!--mt importante  para mudar-->
+                <img src="img/gnavsp/bnr_flituantesp.png" alt="Digimon Liberator">
+            </picture>
+        </a>
+    </aside>
+
+
+    <script>
+        const botaoFecharBanner = document.getElementById("fecharBanner");
+        const bannerFlutuante = document.getElementById("bannerFlutuante");
+
+        botaoFecharBanner.onclick = () => {
+            bannerFlutuante.style.display = "none";
+        };
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                const loading = document.getElementById("loading");
+                loading.style.opacity = "0";
+                loading.style.pointerEvents = "none";
+
+                setTimeout(() => {
+                    loading.style.display = "none";
+                }, 600);
+
+            }, 2000); // 2 ou 3 segundos é bom
+        });
+    </script>
+
+
+</body>
+
+</html>

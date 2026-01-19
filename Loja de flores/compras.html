@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Compras Realizadas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    padding: 20px;
+}
+
+.compras {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px 60px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.item img {
+    width: 100%;
+}
+
+.btn {
+    padding: 8px;
+    background: #c00;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<a href="index.html">← Voltar</a>
+
+<div class="compras">
+    <h1>Compras realizadas</h1>
+    <div id="lista"></div>
+</div>
+
+<script>
+let compras = JSON.parse(localStorage.getItem("comprasRealizadas")) || [];
+const lista = document.getElementById("lista");
+
+function renderCompras() {
+    lista.innerHTML = "";
+
+    if (compras.length === 0) {
+        lista.innerHTML = "<p>Nenhuma compra realizada.</p>";
+        return;
+    }
+
+    compras.forEach((compra, indexCompra) => {
+        compra.itens.forEach((item, indexItem) => {
+            lista.innerHTML += `
+                <div class="item">
+                    <img src="${item.imagem}">
+                    <div>${item.nome}</div>
+                    <div>${item.quantidade}x</div>
+                    <div>R$ ${(item.preco * item.quantidade).toFixed(2)}</div>
+                    <button class="btn"
+                      onclick="cancelar(${indexCompra}, ${indexItem})">
+                      Cancelar
+                    </button>
+                </div>
+            `;
+        });
+    });
+}
+
+
+
+
+function cancelar(indexCompra, indexItem) {
+    const carrinho =
+        JSON.parse(localStorage.getItem("carrinho")) || [];
+
+    const item = compras[indexCompra].itens[indexItem];
+    carrinho.push(item);
+
+    compras[indexCompra].itens.splice(indexItem, 1);
+
+    if (compras[indexCompra].itens.length === 0) {
+        compras.splice(indexCompra, 1);
+    }
+
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    localStorage.setItem("comprasRealizadas", JSON.stringify(compras));
+
+    renderCompras();
+}
+
+</script>
+
+</body>
+</html>

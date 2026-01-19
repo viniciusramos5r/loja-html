@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .busca-produtos {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            background: #111;
+        }
+
+        .busca-produtos input {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .busca-produtos button {
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+
+        .layout-produtos {
+            display: flex;
+            height: calc(100vh - 70px);
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .layout-produtos {
+                margin-top: 70px;
+            }
+        }
+
+
+        /* ===== SIDEBAR ===== */
+        .sidebar-filtros {
+            width: 256px;
+            background: url(img/gnav/barra_lateral.png);
+            color: #fff;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-filtros h3 {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .sidebar-filtros img {
+            width: 200px;
+        }
+
+        /* ===== BUSCA SIDEBAR ===== */
+        .busca-sidebar {
+            margin: 10px 20px;
+        }
+
+        .busca-sidebar input {
+            /*width: 100%;*/
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .filtro {
+            padding: 12px;
+            background: #111;
+            border: none;
+            color: #fff;
+            text-align: left;
+            cursor: pointer;
+            background-color: rgba(255, 0, 0, 0.0);
+            /* para enchergar o fundo*/
+        }
+
+        /*
+        .filtro.ativo {
+            background: #c00;
+        }*/
+
+        /* de dentro do grid*/
+        .conteudo-produtos {
+            flex: 1;
+            background:#e8cbcb;;
+            /*devo trocar po uma continua*/
+            padding: 20px;
+            overflow-y: auto;
+            /* background-size:100%;*/
+        }
+
+        .select-filtro {
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        .grid-produtos {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+       
+        .card-produto {
+            background: #fff;
+            padding: 12px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        .card-produto:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .imagem {
+            height: 220px;
+            background: #ddd;
+            margin-bottom: 10px;
+        }
+
+        .imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 10px;
+            color: #fff;
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .tag.sementes {
+            background: #1ed943;
+        }
+        .tag.flores {
+            background: #e23626;
+        }
+        .tag.outros {
+            background: #100808;
+        }
+
+        .card-produto h3 {
+            font-size: 13px;
+        }
+
+        .data {
+            display: inline-block;
+            border: 1px solid #000;
+            padding: 4px 8px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* btn */
+        .toggle-filtros {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 50%;
+            /* background: #c00;*/
+            color: #fff;
+            padding: 12px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* @media (max-width: 1200px) {
+            .grid-produtos {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .grid-produtos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-produtos {
+                grid-template-columns: 1fr;
+            }
+        }*/
+
+        @media (max-width: 768px) {
+            .sidebar-filtros {
+                position: fixed;
+                left: -240px;
+                top: 0;
+                height: 100%;
+                z-index: 1000;
+                transition: 0.3s;
+            }
+
+            .sidebar-filtros.ativo {
+                left: 0;
+            }
+
+            .toggle-filtros {
+                display: block;
+            }
+
+            .layout-produtos {
+                height: auto;
+            }
+        }
+
+
+
+        /*add*/
+        .grid-produtos {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .grid-produtos {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .grid-produtos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-produtos {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+
+
+
+        .card-produto {
+            background: #fff;
+            padding: 12px;
+        }
+
+        .card-produto a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /*end add*/
+        /*zoom*/
+        .imagem {
+            height: 220px;
+            overflow: hidden;
+            /* ESSENCIAL pro zoom */
+        }
+
+        .imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card-produto:hover .imagem img {
+            transform: scale(1.08);
+        }
+
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .overlay.ativo {
+                display: block;
+            }
+        }
+
+
+
+        .btn_car {
+            right: 0%;
+            position: fixed;
+            z-index: 400;
+            margin-top: 20px;
+
+        }
+
+        @media(max-width: 768px) {
+            .btn_car {
+                margin-top: 20vw;
+            }
+        }
+
+
+
+        /*efeitosbtn*/
+        .filtro img {
+            object-fit: cover;
+            /* mantém proporção e preenche o container */
+            transition: transform 0.5s ease;
+        }
+
+        .filtro:hover img {
+            transform: scale(1.2);
+            /* aumenta 20% */
+        }
+
+
+
+
+
+
+
+
+
+
+
+/**/
+
+        .btn-carrinho #qtd-carrinho {
+    display: none;
+}
+
+.btn-carrinho:hover #qtd-carrinho {
+    display: inline;
+}
+.btn-carrinho #qtd-carrinho {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-carrinho:hover #qtd-carrinho {
+    opacity: 1;
+}
+/**/
+    </style>
+    <link rel="stylesheet" href="header.css" type="text/css">
+</head>
+
+<body>
+    <!--parte compartilhada-->
+
+    <nav id="menu_mobile_topo">
+        <strong style="opacity: 0;">MENU</strong>
+
+        <div>
+            <a href="principal2.html">
+                <img class="logo_mobile" src="img/gnav/img_logo.png" alt="Digimon Card Game">
+            </a>
+        </div>
+
+        <div id="botao_menu">
+            <img style="width: 50px;" src="img/gnav/menu_brn.png" alt="Abrir menu">
+        </div>
+    </nav>
+
+
+    <nav id="tela_mobile">
+        <div id="menu_mobile">
+
+            <!-- Logo no menu mobile -->
+            <a href="principal2.html">
+                <img style="display: block; width: 42.5vw; margin: 0 auto 5vw;" src="img/gnav/img_logo.png"
+                    alt="Digimon Card Game">
+            </a>
+
+            <!-- Botões do menu mobile -->
+            <div style="display: flex; flex-wrap: wrap;">
+                <a href="principal2.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/regras_btn.png"
+                        alt="Sobre"></a>
+                <a href="principal2.html#noticias"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/noticias_btn.png"
+                        alt="Sobre"></a>
+                <a href="texteloja.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/prdutos_btn.png"
+                        alt="Sobre"></a>
+                <a href="principal2.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/lista_btn.png"
+                        alt="Sobre"></a>
+                <a href="principal2.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/avaliacao_btn.png"
+                        alt="Sobre"></a>
+                <a href="principal2.html"><img style="width: 43vw; margin-bottom: 5vw;" src="img/gnav/mais_btn.png"
+                        alt="Sobre"></a>
+            </div>
+
+            <!-- Botão de fechar o menu -->
+            <div class="btn_close">
+                <img style="width: 100%; margin-top: 10px;" src="img/gnav/close.png" alt="Fechar menu">
+            </div>
+        </div>
+    </nav>
+
+ 
+    <nav id="menu_desktop">
+        <div class="container">
+            <div class="logo_desktop">
+                <a href="principal2.html">
+                    <img src="img/gnav/img_logo.png" alt="Digimon Card Game">
+                </a>
+            </div>
+
+            <ul class="menu_links">
+                <li><a href="principal2.html">SOBRE</a></li>
+                <li><a href="principal2.html#noticias">NOTÍCIAS</a></li>
+                <li><a href="texteloja.html">PRODUTOS</a></li>
+                <li><a href="principal2.html">AVALIAÇAO</a></li>
+                <li><a href="principal2.html">LISTA</a></li>
+                <li><a href="principal2.html">REGRAS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+
+
+    <!--////////////////////////////////////////////-->
+
+    <!--////////////////////////////////////////////-->
+
+    <!--////////////////////////////////////////////-->
+
+
+
+    <!--carrinho-->
+    <div class="btn_car">
+        <a href="carrinho.html" class="btn-carrinho" style="background: url(img/gnav/top-news-date-bg.png)no-repeat;
+    width: 90px;
+    display: flex;justify-content: center;     /* Alinha horizontalmente */
+  align-items: center; 
+  ">
+            <img style="width: 30px;"
+                src="https://img.freepik.com/icones-gratis/carrinho-de-mao_318-495998.jpg?size=626&ext=jpg" alt="">
+            <span id="qtd-carrinho">0</span>
+        </a>
+    </div>
+
+
+    <div class="layout-produtos">
+        <aside class="sidebar-filtros" id="sidebar">
+
+            <button class="filtro ativo" data-filtro="todos"><img src="img/gnav/todos.png"></button>
+            <button class="filtro" data-filtro="flores"><img src="img/gnav/flores.png"></button>
+            <button class="filtro" data-filtro="sementes"><img src="img/gnav/sementes.png"></button>
+            <button class="filtro" data-filtro="outros"><img src="img/gnav/outros.png"></button>
+
+            <div class="busca-sidebar">
+                <input type="text" id="campo-busca" placeholder="Buscar produto...">
+            </div>
+
+        </aside>
+
+
+        <main class="conteudo-produtos">
+            <select class="select-filtro" id="ordenar-preco">
+                <option value="">Ordenar por preço</option>
+                <option value="menor">Menor preço</option>
+                <option value="maior">Maior preço</option>
+            </select>
+
+
+
+
+
+            <ul class="grid-produtos">
+<!--lirio vermelho-->
+                <li class="card-produto" data-categoria="flores" data-preco="300.50" data-nome="Lirio Vermelho">
+                    <a href="produto.html">
+                        <div class="imagem">
+                            <img src="https://img.freepik.com/fotos-premium/lirios-vermelhos-chamados-marco-polo-linda-flor-de-lirio-cresce-no-jardim-sob-os-raios-do-sol-quente-closeup_457363-2221.jpg">
+                        </div>
+                        <span class="tag flores">flores</span>
+                        <h3>Lirio Vermelho</h3>
+                        <span class="data">300.50</span>
+                    </a>
+                </li>
+<!--demente girassol-->
+                <li class="card-produto" data-categoria="sementes" data-preco="1.50" data-nome="Sementes de Girassol">
+                    <a href="sementes_de_girassol.html">
+                        <div class="imagem">
+                            <img src="semente.jpg">
+                        </div>
+                        <span class="tag sementes">sementes</span>
+                        <h3>Sementes de Girassol</h3>
+                        <span class="data">1.50</span>
+                    </a>
+                </li>
+<!--rosas-->
+                <li class="card-produto" data-categoria="flores" data-preco="50.50" data-nome="Rosas">
+                    <a href="rosas.html">
+                        <div class="imagem">
+                            <img src="rosasverm.webp">
+                        </div>
+                        <span class="tag flores">flores</span>
+                        <h3>Rosas</h3>
+                        <span class="data">50.50</span>
+                    </a>
+                </li>
+<!--erva daninha-->
+                <li class="card-produto" data-categoria="flores" data-preco="235.99" data-nome="erva daninha">
+                    <a href="erva_daninha.html">
+                        <div class="imagem">
+                            <img src="https://blog.equipacenter.com.br/wp-content/uploads/2022/03/corda-de-viola.jpg">
+                        </div>
+                        <span class="tag flores">flores</span>
+                        <h3>Erva daninha</h3>
+                        <span class="data">235.99</span>
+                    </a>
+                </li>
+<!--erva mate-->
+                <li class="card-produto" data-categoria="flores" data-preco="300.50" data-nome="Erva Mate">
+                    <a href="produto.html">
+                        <div class="imagem">
+                            <img src="https://img.freepik.com/fotos-premium/lirios-vermelhos-chamados-marco-polo-linda-flor-de-lirio-cresce-no-jardim-sob-os-raios-do-sol-quente-closeup_457363-2221.jpg">
+                        </div>
+                        <span class="tag flores">flores</span>
+                        <h3>Lirio Vermelho</h3>
+                        <span class="data">300.50</span>
+                    </a>
+                </li>
+<!--vaso-->
+                <li class="card-produto" data-categoria="flores" data-preco="300.50" data-nome="Lirio Vermelho">
+                    <a href="produto.html">
+                        <div class="imagem">
+                            <img src="https://img.freepik.com/fotos-premium/lirios-vermelhos-chamados-marco-polo-linda-flor-de-lirio-cresce-no-jardim-sob-os-raios-do-sol-quente-closeup_457363-2221.jpg">
+                        </div>
+                        <span class="tag flores">flores</span>
+                        <h3>Lirio Vermelho</h3>
+                        <span class="data">300.50</span>
+                    </a>
+                </li>
+
+            </ul>
+    </div>
+    </main>
+    </div>
+
+    <div class="toggle-filtros" onclick="toggleFiltros()"><img id="imgToggleFiltros" style="width: 50px;"
+            src="img/gnav/flo_fx.png"></div> <!--flor aberta-->
+    <div class="overlay" onclick="toggleFiltros()"></div> <!-- camada destra-->
+
+
+    <script>
+        function getProdutos() {
+            return Array.from(document.querySelectorAll(".card-produto"));
+        }
+
+ /*/////////////// filtro/////////// */
+        document.querySelectorAll(".filtro").forEach(botao => {
+            botao.addEventListener("click", () => {             /* add da funcao*/
+                document.querySelectorAll(".filtro").forEach(b => b.classList.remove("ativo"));
+                botao.classList.add("ativo");
+
+                const filtro = botao.dataset.filtro;
+
+                getProdutos().forEach(produto => {
+                    produto.style.display =
+                        filtro === "todos" || produto.dataset.categoria === filtro
+                            ? "block" : "none";
+                });
+            });
+        });
+
+/* orrdenar */
+        document.getElementById("ordenar-preco").addEventListener("change", e => {
+            const grid = document.querySelector(".grid-produtos");
+            const produtos = getProdutos();
+
+            if (!e.target.value) return;
+
+            produtos
+                .sort((a, b) => {
+                    const precoA = Number(a.dataset.preco);    /*pega preco do produto*/
+                    const precoB = Number(b.dataset.preco);
+
+                    return e.target.value === "menor"
+                        ? precoA - precoB
+                        : precoB - precoA;
+                })
+                .forEach(produto => grid.appendChild(produto));
+        });
+
+/* busca */
+        document.getElementById("campo-busca").addEventListener("keyup", () => {
+            const termo = document.getElementById("campo-busca").value.toLowerCase();
+
+            getProdutos().forEach(produto => {
+                produto.style.display =
+                    produto.dataset.nome.toLowerCase().includes(termo)
+                        ? "block" : "none";
+            });
+        });
+    </script>
+
+    <!--<script>
+        /* MOBILE */
+        function toggleFiltros() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.querySelector(".overlay");
+
+            sidebar.classList.toggle("ativo");
+            overlay.classList.toggle("ativo");
+
+            document.body.style.overflow =
+                sidebar.classList.contains("ativo") ? "hidden" : "auto";
+        }
+
+    </script>-->
+    <script>
+        function toggleFiltros() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.querySelector(".overlay");
+            const img = document.getElementById("imgToggleFiltros");
+
+            const aberto = sidebar.classList.toggle("ativo");
+            overlay.classList.toggle("ativo", aberto);
+
+            document.body.style.overflow = aberto ? "hidden" : "auto";
+
+                                                        // troca
+            img.src = aberto
+                ? "img/gnav/flo_ab.png"   // menu aberto
+                : "img/gnav/flo_fx.png";  // menu fechado
+        }
+    </script>
+
+
+
+    <script>
+        let startX = 0;
+
+        document.addEventListener("touchstart", e => {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener("touchend", e => {
+            const endX = e.changedTouches[0].clientX;
+            const sidebar = document.getElementById("sidebar");
+
+            if (startX < 40 && endX > 120) {
+                sidebar.classList.add("ativo");
+                document.querySelector(".overlay").classList.add("ativo");
+                document.body.style.overflow = "hidden";
+            }
+
+            if (startX > 200 && endX < 100) {
+                sidebar.classList.remove("ativo");
+                document.querySelector(".overlay").classList.remove("ativo");
+                document.body.style.overflow = "auto";
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        const botaoMenu = document.getElementById("botao_menu");
+        const menuMobile = document.getElementById("tela_mobile");
+        const botaoFecharMenu = document.querySelector(".btn_close");
+
+        botaoMenu.onclick = () => {
+            menuMobile.style.display =
+                menuMobile.style.display === "block" ? "none" : "block";
+        };
+        botaoFecharMenu.onclick = () => {
+            menuMobile.style.display = "none";
+        };
+    </script>
+    <script>  /* att carrinho*/  /*deve de estar em todas aspaginas*/
+        function atualizarContadorCarrinho() {
+            const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+            const total = carrinho.reduce((s, p) => s + p.quantidade, 0);
+            const el = document.getElementById("qtd-carrinho");
+            if (el) el.textContent = total;
+        }
+
+        atualizarContadorCarrinho();
+    </script>
+</body>
+
+</html>

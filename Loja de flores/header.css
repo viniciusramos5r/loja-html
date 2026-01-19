@@ -1,0 +1,108 @@
+     * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Montserrat", -apple-system, sans-serif;
+            font-weight: 900;
+            color: #171f55;
+            margin: 0;
+          /*  background: url(img/gnav/header_bg.png) no-repeat fixed center top;*/
+            background-size: cover;
+        }
+
+        a {
+            text-decoration: none;
+            color: #171f55;
+        }
+ #menu_desktop {
+            display: none;
+        }
+
+        @media (min-width: 801px) {
+            #menu_desktop {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                height: 96px;
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                background: url(img/gnav/header_bg.png) no-repeat top left;
+            }
+
+            #menu_desktop .container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 40px;
+            }
+
+            .logo_desktop img {
+                width: 180px;
+            }
+
+            .menu_links {
+                display: flex;
+                gap: 20px;
+                list-style: none;
+                font-size: 14px;
+            }
+
+            .menu_links li a {
+                padding: 10px 14px;
+                color: #00408b;
+            }
+        }
+
+        /* ================= MENU MOBILE ================= */
+        #menu_mobile_topo {
+            z-index: 200;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: url(img/gnavsp/bg_header.png) no-repeat center top;
+            height: 16.8vw;
+            background-size: auto 16.875vw;
+            position: fixed;
+    width: 100%;
+}
+        
+
+        #botao_menu {
+            cursor: pointer;
+        }
+
+        .logo_mobile {
+            display: block;
+            margin: 0 auto;
+            width: 40vw;
+        }
+
+        /* Tela que cobre o site quando o menu mobile está aberto */
+        #tela_mobile {
+            display: none;
+        }
+
+        #menu_mobile {
+            background: url(img/gnav/fundo.png)no-repeat;
+            z-index: 2000;
+            position: fixed;
+            top: 0;
+            height: 100%;
+            background-size: 100vw;
+        }
+
+        #menu_mobile a {
+            display: block;
+            margin: 2vw auto 0;
+        }
+
+        /* Esconde o menu mobile no desktop */
+        @media (min-width: 801px) {
+            #menu_mobile_topo {
+                display: none;
+            }
+        }
